@@ -1,0 +1,385 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Calendario Más Béisbol 13U</title>
+
+    <!-- Bootstrap -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+
+    <!-- Bootstrap Icons -->
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css"
+    />
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+
+    <style>
+      :root {
+        --primary-color: #0d6efd;
+        --secondary-color: #001f3f;
+        --accent-color: #ffc107;
+        --light-bg: #f4f7fb;
+        --card-bg: #ffffff;
+        --text-color: #1f2937;
+      }
+
+      body {
+        font-family: "Poppins", sans-serif;
+        background: linear-gradient(135deg, #0f172a, #1e3a8a);
+        min-height: 100vh;
+        padding: 40px 15px;
+        color: var(--text-color);
+      }
+
+      .schedule-wrapper {
+        max-width: 950px;
+        margin: auto;
+      }
+
+      .hero-card {
+        background: rgba(255, 255, 255, 0.08);
+        border: 1px solid rgba(255, 255, 255, 0.15);
+        backdrop-filter: blur(10px);
+        border-radius: 28px;
+        overflow: hidden;
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.35);
+      }
+
+      .hero-header {
+        background: linear-gradient(135deg, #2563eb, #0f172a);
+        padding: 35px 30px;
+        color: white;
+        position: relative;
+      }
+
+      .hero-header::after {
+        content: "";
+        position: absolute;
+        width: 250px;
+        height: 250px;
+        background: rgba(255, 255, 255, 0.08);
+        border-radius: 50%;
+        top: -120px;
+        right: -80px;
+      }
+
+      .hero-title {
+        font-size: 2rem;
+        font-weight: 700;
+        margin-bottom: 10px;
+        position: relative;
+        z-index: 2;
+      }
+
+      .hero-subtitle {
+        font-size: 1rem;
+        opacity: 0.9;
+        position: relative;
+        z-index: 2;
+      }
+
+      .badge-custom {
+        background: rgba(255, 255, 255, 0.15);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        padding: 10px 18px;
+        border-radius: 50px;
+        font-size: 0.9rem;
+        margin-top: 18px;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        position: relative;
+        z-index: 2;
+      }
+
+      .match-list {
+        padding: 30px;
+        background: #f8fafc;
+      }
+
+      .match-card {
+        background: white;
+        border-radius: 20px;
+        padding: 22px;
+        margin-bottom: 20px;
+        border-left: 6px solid var(--primary-color);
+        transition: all 0.3s ease;
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.06);
+      }
+
+      .match-card:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 15px 25px rgba(0, 0, 0, 0.12);
+      }
+
+      .match-top {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 10px;
+        margin-bottom: 18px;
+      }
+
+      .date-badge {
+        background: #e0edff;
+        color: #0d47a1;
+        padding: 10px 16px;
+        border-radius: 14px;
+        font-size: 0.9rem;
+        font-weight: 600;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+      }
+
+      .time-badge {
+        background: #fff3cd;
+        color: #856404;
+        padding: 10px 16px;
+        border-radius: 14px;
+        font-size: 0.9rem;
+        font-weight: 600;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+      }
+
+      .teams {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 16px;
+        flex-wrap: wrap;
+      }
+
+      .team {
+        background: #f1f5f9;
+        padding: 14px 18px;
+        border-radius: 16px;
+        min-width: 180px;
+        text-align: center;
+        font-weight: 600;
+        color: #0f172a;
+      }
+
+      .vs {
+        background: linear-gradient(135deg, #ef4444, #b91c1c);
+        color: white;
+        width: 55px;
+        height: 55px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 700;
+        box-shadow: 0 10px 18px rgba(239, 68, 68, 0.35);
+      }
+
+      .footer-note {
+        text-align: center;
+        color: rgba(255, 255, 255, 0.85);
+        margin-top: 20px;
+        font-size: 0.95rem;
+      }
+
+      @media (max-width: 768px) {
+        .hero-title {
+          font-size: 1.6rem;
+        }
+
+        .team {
+          width: 100%;
+        }
+
+        .vs {
+          width: 48px;
+          height: 48px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="schedule-wrapper">
+      <div class="hero-card">
+        <div class="hero-header">
+          <h1 class="hero-title">
+            <i class="bi bi-trophy-fill"></i>
+            Calendario Más Béisbol
+          </h1>
+
+          <p class="hero-subtitle">Torneo Banco Central • Categoría 13U</p>
+
+          <div class="badge-custom">
+            <i class="bi bi-calendar-event-fill"></i>
+            5 partidos programados
+          </div>
+        </div>
+
+        <div class="match-list">
+          <!-- Match 1 -->
+          <div class="match-card">
+            <div class="match-top">
+              <div class="date-badge">
+                <i class="bi bi-calendar3"></i>
+                Domingo 17 de mayo
+              </div>
+
+              <div class="time-badge">
+                <i class="bi bi-clock-fill"></i>
+                6:00 P.M.
+              </div>
+            </div>
+
+            <div class="teams">
+              <div class="team">
+                <i class="bi bi-shield-fill"></i>
+                Más Béisbol
+              </div>
+
+              <div class="vs">VS</div>
+
+              <div class="team">
+                <i class="bi bi-shield"></i>
+                Beato Martínez
+              </div>
+            </div>
+          </div>
+
+          <!-- Match 2 -->
+          <div class="match-card">
+            <div class="match-top">
+              <div class="date-badge">
+                <i class="bi bi-calendar3"></i>
+                Domingo 24 de mayo
+              </div>
+
+              <div class="time-badge">
+                <i class="bi bi-clock-fill"></i>
+                6:30 P.M.
+              </div>
+            </div>
+
+            <div class="teams">
+              <div class="team">
+                <i class="bi bi-shield-fill"></i>
+                Más Béisbol
+              </div>
+
+              <div class="vs">VS</div>
+
+              <div class="team">
+                <i class="bi bi-shield"></i>
+                Daniel Rojas
+              </div>
+            </div>
+          </div>
+
+          <!-- Match 3 -->
+          <div class="match-card">
+            <div class="match-top">
+              <div class="date-badge">
+                <i class="bi bi-calendar3"></i>
+                Miércoles 3 de junio
+              </div>
+
+              <div class="time-badge">
+                <i class="bi bi-clock-fill"></i>
+                4:30 P.M.
+              </div>
+            </div>
+
+            <div class="teams">
+              <div class="team">
+                <i class="bi bi-shield"></i>
+                Team RT
+              </div>
+
+              <div class="vs">VS</div>
+
+              <div class="team">
+                <i class="bi bi-shield-fill"></i>
+                Más Béisbol
+              </div>
+            </div>
+          </div>
+
+          <!-- Match 4 -->
+          <div class="match-card">
+            <div class="match-top">
+              <div class="date-badge">
+                <i class="bi bi-calendar3"></i>
+                Sábado 6 de junio
+              </div>
+
+              <div class="time-badge">
+                <i class="bi bi-clock-fill"></i>
+                4:30 P.M.
+              </div>
+            </div>
+
+            <div class="teams">
+              <div class="team">
+                <i class="bi bi-shield"></i>
+                La Javilla
+              </div>
+
+              <div class="vs">VS</div>
+
+              <div class="team">
+                <i class="bi bi-shield-fill"></i>
+                Más Béisbol
+              </div>
+            </div>
+          </div>
+
+          <!-- Match 5 -->
+          <div class="match-card">
+            <div class="match-top">
+              <div class="date-badge">
+                <i class="bi bi-calendar3"></i>
+                Miércoles 10 de junio
+              </div>
+
+              <div class="time-badge">
+                <i class="bi bi-clock-fill"></i>
+                3:00 P.M.
+              </div>
+            </div>
+
+            <div class="teams">
+              <div class="team">
+                <i class="bi bi-shield-fill"></i>
+                Más Béisbol
+              </div>
+
+              <div class="vs">VS</div>
+
+              <div class="team">
+                <i class="bi bi-shield"></i>
+                Jesús Roca Mía
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="footer-note">
+        <i class="bi bi-star-fill"></i>
+        Diseño profesional • Responsive • Bootstrap 5
+      </div>
+    </div>
+  </body>
+</html>
